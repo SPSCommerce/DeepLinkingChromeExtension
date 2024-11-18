@@ -9,8 +9,9 @@
  * 
  * @returns {boolean} True if the button was successfully added, otherwise false.
  */
-function addButtonNextToCustomerOrderNbr() {
+function addButtonToERP() {
 
+	// Get the current URL
 	let currentURL = document.location.href;	
 	let inputField;
 	//Search for Acumatica Field - failure returns null
@@ -138,7 +139,7 @@ function observeDOMChanges() {
   const observer = new MutationObserver((mutationsList) => {
 	for (let mutation of mutationsList) {
 		if (mutation.type === 'childList' ) {
-			if (addButtonNextToCustomerOrderNbr())
+			if (addButtonToERP())
 				observer.disconnect();
 		  }
 	}
@@ -150,7 +151,7 @@ function observeDOMChanges() {
 
 
 // Immediately run the function and start observing for dynamic changes
-//addButtonNextToCustomerOrderNbr();  // Initial run to check for elements
+//addButtonToERP();  // Initial run to check for elements
 //observeDOMChanges();  // Start observing for dynamically added elements
 
 document.addEventListener('load', function(event) {

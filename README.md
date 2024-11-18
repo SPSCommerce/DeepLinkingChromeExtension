@@ -1,5 +1,8 @@
 # Deep Linking Chrome Extension
-For ERP Systems that have a light footprint but still need Deep Linking functionality, this Chrome extension adds a Deep linking button to the ERP web page.  It is designed to handle multiple ERPs and to focus on specific pages within the ERP.  The code runs in the background for pages that match patterns specified in the manifest.json
+For ERP Systems that have a light footprint but still need Deep Linking functionality, this Chrome extension adds a Deep linking button to the ERP web page.  It is designed to handle multiple ERPs and to focus on specific pages within the ERP.  The code runs in the background for pages that match patterns specified in the manifest.json.  
+
+##Scope
+This is a POC project.  The objective is to add a button to a Sales Order Screen in multiple ERPs that will allow the user to open a Fulfillment Search Screen with the Customer ORder Number or similar as the keyword search item.
 
 ## Features
 
@@ -28,6 +31,14 @@ For ERP Systems that have a light footprint but still need Deep Linking function
 1. Navigate to your ERP system in Chrome.
 2. Click the Deep Linking button added by the extension.
 3. If the Deep Linking button doesn't appear you may need to refresh the screen.
+
+##TODO
+As of writing, this project only works if you access a website with "SO301000" in the URL.  This is designed to target Acumatica installations.  The intent of this
+project is to target multiple ERP sites.  In order to add an ERP to the mix:
+1. Alter Manifest.json so that the code injection runs on URLs matching the matching rule
+2. Add a function for finding the input field with the data you would like to use for deep linking to content.js
+3. Call the function in addButtonToERP() in the section for finding the input
+4. Acquire better button images.
 
 ## Contributing
 
