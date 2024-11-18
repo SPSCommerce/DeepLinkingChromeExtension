@@ -11,10 +11,10 @@
  */
 function addButtonNextToCustomerOrderNbr() {
 
-	let myURL = document.location.href;	
-	var inputField;
+	let currentURL = document.location.href;	
+	let inputField;
 	//Search for Acumatica Field - failure returns null
-	if (myURL.includes("SO301000")) {
+	if (currentURL.includes("SO301000")) {
 		inputField = findInputFieldAcumatica();		
 	}
 	//TODO add SAP function
@@ -23,7 +23,7 @@ function addButtonNextToCustomerOrderNbr() {
 	// If the input field was not found, return
 	if (!inputField)
 	{
-		console.log('Couldnt find it');
+		console.log("Couldn't find input field");
 		return;
 	}
  
@@ -37,9 +37,7 @@ function addButtonNextToCustomerOrderNbr() {
     });
 
 	// Append button after the input element if it doesn't already exist
-	let exists = false;
-	exists = (inputField.nextSibling && inputField.nextSibling?.classList?.contains('SPScustomer-order-btn'));
-	// Check if a button already exists to avoid duplication
+	let exists = (inputField.nextSibling && inputField.nextSibling?.classList?.contains('SPScustomer-order-btn'));	
 	if (!exists)
 	{		
 		inputField.insertAdjacentElement('afterend', button);		
@@ -65,13 +63,13 @@ function findInputFieldAcumatica() {
   const iframe = document.getElementById("main"); 
   if (!iframe)
   {
-	  console.log('Couldnt find iframe');
+	  console.log("Couldn't find iframe document");
 	  return null;
   }
   const iframeDocument = iframe.contentWindow?.document; 
     if (!iframeDocument)
   {
-	  console.log('Couldnt find iframe');
+	  console.log("Couldn't find iframe document");
 	  return null;
   }
   // Find all elements with an ID attribute'
@@ -138,13 +136,12 @@ function observeDOMChanges() {
   console.log("Setting up MutationObserver");
 
   const observer = new MutationObserver((mutationsList) => {
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'childList' ) {
-        if (addButtonNextToCustomerOrderNbr())
-			observer.disconnect();
-      }
-	  
-    }
+	for (let mutation of mutationsList) {
+		if (mutation.type === 'childList' ) {
+			if (addButtonNextToCustomerOrderNbr())
+				observer.disconnect();
+		  }
+	}
   });
   
   observer.observe(document.body, { childList: true, subtree: true });
@@ -153,5 +150,11 @@ function observeDOMChanges() {
 
 
 // Immediately run the function and start observing for dynamic changes
-addButtonNextToCustomerOrderNbr();  // Initial run to check for elements
-observeDOMChanges();  // Start observing for dynamically added elements
+//addButtonNextToCustomerOrderNbr();  // Initial run to check for elements
+//observeDOMChanges();  // Start observing for dynamically added elements
+
+document.addEventListener('load', function(event) {
+	//console.log('Event:', event.type, event.target);
+	observeDOMChanges();
+  },true);
+
