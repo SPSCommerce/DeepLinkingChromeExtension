@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SPS Deep Linking Button",
   "version": "1.0",
-  "description": "Adds a button next to inputs with id 'CustomerOrderNbr'.",
+  "description": "Adds a SPS Deep Linking button to certain ERP pages.",
   "permissions": ["scripting"],
   "content_scripts": [
     {
