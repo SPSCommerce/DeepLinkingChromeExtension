@@ -37,6 +37,7 @@ As of writing, this project only works if you access a website with "SO301000" i
 project is to target multiple ERP sites.  In order to add an ERP to the mix:
 1. Alter Manifest.json so that the code injection runs on URLs matching the matching rule
 2. Add a function for finding the input field with the data you would like to use for deep linking to content.js
+3. Add a function for creating a button (this may need to be tweaked per erp)
 3. Call the function in addButtonToERP() in the section for finding the input
 4. Acquire better button images.
 
