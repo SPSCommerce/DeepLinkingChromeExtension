@@ -13,13 +13,16 @@ function addButtonToERP() {
 
 	// Get the current URL
 	let currentURL = document.location.href;	
+	//console.log(currentURL);
 	let inputField;
 	//Search for Acumatica Field - failure returns null
 	if (currentURL.includes("SO301000")) {
 		inputField = findInputFieldAcumatica();		
 	}
 	//TODO add SAP function
-	//TODO add Quickbooks function
+	if (currentURL.includes("qbo.intuit.com/app/invoice")) {
+		inputField = findInputFieldQBO();		
+	}
 
 	// If the input field was not found, return
 	if (!inputField)
@@ -28,8 +31,22 @@ function addButtonToERP() {
 		return;
 	}
  
-	// Create the button element		
-	const button = CreateSPSButton();
+	let button;
+	// Create the button element for Acumatica
+	if (currentURL.includes("SO301000")) {		
+		button = CreateSPSButtonAcumatica();
+	}
+	// Create the button element for QBO
+	if (currentURL.includes("qbo.intuit.com/app/invoice")) {		
+		button = CreateSPSButtonQBO();
+	}
+	//TODO Create the button element for SAP
+
+	if (!button)	
+	{
+		console.log("Couldn't create button");
+		return false;
+	}
 
     // Create Deep Linking URL Event and add to button
     button.addEventListener('click', () => {
@@ -94,7 +111,37 @@ function findInputFieldAcumatica() {
 }
 
 /**
- * Creates a custom button element for searching SPS Fulfillment orders.
+ * Traverses the DOM to find an input field in a way that works for QBO (QuickBooks Online).
+ * 
+ * This function searches for elements with a specific ID pattern and returns the first element
+ * that has a non-empty value attribute.
+ *
+ * @returns {HTMLElement|null} The first matching element with a non-empty value, or null if no such element is found.
+ */
+function findInputFieldQBO() {
+	//traverses DOM to find the field in a way that works for QBO
+		 // Find all elements with an name attribute'
+	 const inputName = "djQ6OTEzMDM1MjI2Nzk1NzgyNjovY29tbW9uL0N1c3RvbUZpZWxkRGVmaW5pdGlvbjo";
+	 const elements = document.querySelectorAll('input');
+	 //console.log(elements.length)
+	 //Filter to find the correct element with the name above
+	 const matchingElements = Array.from(elements).filter(element => element.name.includes(inputName));
+   
+	 // Loop through the elements to find the first one with a non-empty value
+	 for (let i = 0; i < matchingElements.length; i++) {
+	   const element = matchingElements[i];
+   
+	   // Check if the element has a non-empty value attribute
+	   if (element.value && element.value.trim() !== "") {
+		 console.log(`Found element with id "${element.id}" and value: ${element.value}`);
+		 return element;
+	   }
+	 }
+   
+	 return null;
+   }
+/**
+ * Creates a custom button element for searching SPS Fulfillment orders for Acumatica.
  * 
  * The button is styled with a specific image and dimensions, and includes
  * event listeners to change the image on hover. The button is positioned
@@ -102,7 +149,7 @@ function findInputFieldAcumatica() {
  * 
  * @returns {HTMLButtonElement} The fully configured button element.
  */
-function CreateSPSButton() {
+function CreateSPSButtonAcumatica() {
 
 	// Get the correct URL for sps.png from the extension's directory
 	const imageURL = chrome.runtime.getURL("sps.png");
@@ -110,15 +157,55 @@ function CreateSPSButton() {
 	// Create a new button element	
 	const button = document.createElement('button');
 	button.classList.add('SPScustomer-order-btn');
-	button.style.width = '24px'; // Adjust button width to fit image size
-	button.style.height = '24px'; // Adjust button height to fit image size    
+	button.style.width = '20px'; // Adjust button width to fit image size
+	button.style.height = '20px'; // Adjust button height to fit image size    
 	button.style.backgroundImage = `url("${imageURL}")`;
 	button.style.backgroundSize = 'cover'; // Ensure the image covers the entire button
 	button.style.backgroundRepeat = 'no-repeat';
 	button.style.border = 'none'; // Remove default border for a cleaner look
 	button.style.padding = '0'; // Remove default padding
 	button.title = 'Search SPS Fulfillment for Order';
-	button.style.position = 'absolute';
+	button.style.position = 'relative';
+	button.style.align = 'right';
+	button.style.bottom = '0';
+
+	button.addEventListener('mouseover', () => {
+		const imageURL = chrome.runtime.getURL("spshover.png");
+		button.style.backgroundImage = `url("${imageURL}")`;
+	});
+	button.addEventListener('mouseout', () => {
+		const imageURL = chrome.runtime.getURL("sps.png");
+		button.style.backgroundImage = `url("${imageURL}")`;
+	});
+	return button;
+}
+/**
+ * Creates a custom button element for searching SPS Fulfillment orders for QBO.
+ * 
+ * The button is styled with a specific image and dimensions, and includes
+ * event listeners to change the image on hover. The button is positioned
+ * absolutely at the bottom of its containing element.
+ * 
+ * @returns {HTMLButtonElement} The fully configured button element.
+ */
+function CreateSPSButtonQBO() {
+
+	// Get the correct URL for sps.png from the extension's directory
+	const imageURL = chrome.runtime.getURL("sps.png");
+	
+	// Create a new button element	
+	const button = document.createElement('button');
+	button.classList.add('SPScustomer-order-btn');
+	button.style.width = '20px'; // Adjust button width to fit image size
+	button.style.height = '20px'; // Adjust button height to fit image size    
+	button.style.backgroundImage = `url("${imageURL}")`;
+	button.style.backgroundSize = 'cover'; // Ensure the image covers the entire button
+	button.style.backgroundRepeat = 'no-repeat';
+	button.style.border = 'none'; // Remove default border for a cleaner look
+	button.style.padding = '0'; // Remove default padding
+	button.title = 'Search SPS Fulfillment for Order';
+	button.style.position = 'relative';
+	button.style.align = 'right';
 	button.style.bottom = '0';
 
 	button.addEventListener('mouseover', () => {
