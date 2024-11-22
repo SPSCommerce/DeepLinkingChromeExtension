@@ -36,7 +36,10 @@ function addButtonToERP() {
 	if (currentURL.includes("SO301000")) {		
 		button = CreateSPSButtonAcumatica();
 	}
-	//TODO Create the button element for QBO
+	// Create the button element for QBO
+	if (currentURL.includes("qbo.intuit.com/app/invoice")) {		
+		button = CreateSPSButtonQBO();
+	}
 	//TODO Create the button element for SAP
 
 	if (!button)	
@@ -138,7 +141,7 @@ function findInputFieldQBO() {
 	 return null;
    }
 /**
- * Creates a custom button element for searching SPS Fulfillment orders.
+ * Creates a custom button element for searching SPS Fulfillment orders for Acumatica.
  * 
  * The button is styled with a specific image and dimensions, and includes
  * event listeners to change the image on hover. The button is positioned
@@ -147,6 +150,45 @@ function findInputFieldQBO() {
  * @returns {HTMLButtonElement} The fully configured button element.
  */
 function CreateSPSButtonAcumatica() {
+
+	// Get the correct URL for sps.png from the extension's directory
+	const imageURL = chrome.runtime.getURL("sps.png");
+	
+	// Create a new button element	
+	const button = document.createElement('button');
+	button.classList.add('SPScustomer-order-btn');
+	button.style.width = '20px'; // Adjust button width to fit image size
+	button.style.height = '20px'; // Adjust button height to fit image size    
+	button.style.backgroundImage = `url("${imageURL}")`;
+	button.style.backgroundSize = 'cover'; // Ensure the image covers the entire button
+	button.style.backgroundRepeat = 'no-repeat';
+	button.style.border = 'none'; // Remove default border for a cleaner look
+	button.style.padding = '0'; // Remove default padding
+	button.title = 'Search SPS Fulfillment for Order';
+	button.style.position = 'relative';
+	button.style.align = 'right';
+	button.style.bottom = '0';
+
+	button.addEventListener('mouseover', () => {
+		const imageURL = chrome.runtime.getURL("spshover.png");
+		button.style.backgroundImage = `url("${imageURL}")`;
+	});
+	button.addEventListener('mouseout', () => {
+		const imageURL = chrome.runtime.getURL("sps.png");
+		button.style.backgroundImage = `url("${imageURL}")`;
+	});
+	return button;
+}
+/**
+ * Creates a custom button element for searching SPS Fulfillment orders for QBO.
+ * 
+ * The button is styled with a specific image and dimensions, and includes
+ * event listeners to change the image on hover. The button is positioned
+ * absolutely at the bottom of its containing element.
+ * 
+ * @returns {HTMLButtonElement} The fully configured button element.
+ */
+function CreateSPSButtonQBO() {
 
 	// Get the correct URL for sps.png from the extension's directory
 	const imageURL = chrome.runtime.getURL("sps.png");
