@@ -31,8 +31,19 @@ function addButtonToERP() {
 		return;
 	}
  
-	// Create the button element		
-	const button = CreateSPSButton();
+	let button;
+	// Create the button element for Acumatica
+	if (currentURL.includes("SO301000")) {		
+		button = CreateSPSButtonAcumatica();
+	}
+	//TODO Create the button element for QBO
+	//TODO Create the button element for SAP
+
+	if (!button)	
+	{
+		console.log("Couldn't create button");
+		return false;
+	}
 
     // Create Deep Linking URL Event and add to button
     button.addEventListener('click', () => {
@@ -135,7 +146,7 @@ function findInputFieldQBO() {
  * 
  * @returns {HTMLButtonElement} The fully configured button element.
  */
-function CreateSPSButton() {
+function CreateSPSButtonAcumatica() {
 
 	// Get the correct URL for sps.png from the extension's directory
 	const imageURL = chrome.runtime.getURL("sps.png");
