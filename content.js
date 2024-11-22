@@ -15,32 +15,25 @@ function addButtonToERP() {
 	let currentURL = document.location.href;	
 	//console.log(currentURL);
 	let inputField;
+	let button;
 	//Search for Acumatica Field - failure returns null
 	if (currentURL.includes("SO301000")) {
-		inputField = findInputFieldAcumatica();		
+		inputField = findInputFieldAcumatica();	
+		button = CreateSPSButtonAcumatica();
+	}	
+	//Search for QBO Field - failure returns null
+	if (currentURL.includes("qbo.intuit.com/app/invoice")) {
+		inputField = findInputFieldQBO();
+		button = CreateSPSButtonQBO();		
 	}
 	//TODO add SAP function
-	if (currentURL.includes("qbo.intuit.com/app/invoice")) {
-		inputField = findInputFieldQBO();		
-	}
-
+	
 	// If the input field was not found, return
 	if (!inputField)
 	{
 		console.log("Couldn't find input field");
 		return;
 	}
- 
-	let button;
-	// Create the button element for Acumatica
-	if (currentURL.includes("SO301000")) {		
-		button = CreateSPSButtonAcumatica();
-	}
-	// Create the button element for QBO
-	if (currentURL.includes("qbo.intuit.com/app/invoice")) {		
-		button = CreateSPSButtonQBO();
-	}
-	//TODO Create the button element for SAP
 
 	if (!button)	
 	{
