@@ -6,7 +6,7 @@
   "permissions": ["scripting", "activeTab"],
   "content_scripts": [
     {
-      "matches": ["*://*/*SO301000*","*://qbo.intuit.com/app/invoice*"],
+      "matches": ["*://*/*SO301000*","*://qbo.intuit.com/app/invoice*","https://*.s4hana.cloud.sap/ui*"],
       "js": ["content.js"],
     "run_at": "document_end"
     }
